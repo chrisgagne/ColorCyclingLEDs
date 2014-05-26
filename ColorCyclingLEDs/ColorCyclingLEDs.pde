@@ -1,3 +1,5 @@
+import processing.video.*;
+ 
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 
@@ -17,6 +19,9 @@ int numImages = 48 - 1; // subtracting 1 due to indexing at 0 later
 PImage[] images = new PImage[numImages];
 PImage img = new PImage();
 int imageChoice, lastImage; 
+
+// suit image
+PImage suitImage = new PImage();
 
 // set up color palette - palettes should be in the data folder and named lut#.gif
 int numPalettes = 4 - 1; // subtracting 1 due to indexing at 0 later
@@ -91,10 +96,9 @@ void setup()
   for (int i = 0; i < images.length; i ++)
   {
     images[i] = loadImage( i + ".gif");
-  }
-  for (int i=0; i  < images.length; i ++)
-  {
     images[i].resize(width, height);
+    //images[i].filter(BLUR,8);
+    
   }
 
   // load color palettes into a two-dimensional array for each channel
@@ -108,13 +112,21 @@ void setup()
       bluePalettes[i][j] = int(blue(paletteSample));
     }
   }
+
+  // load suit image
+  suitImage = loadImage("suitLeds.png");
+  suitImage.resize(width, height);
 }
+
 
 void draw()
 {
  
   // set the background image
   image(images[imageChoice], 0, 0);
+
+  //image(images[imageChoice], 122, 0, 200, height);
+  //image(images[imageChoice], 342, 0, 200, height);
 
   // perform a forward FFT on the samples in song's mix buffer
   // note that if song were a MONO file, this would be the same as using song.left or song.right
@@ -127,11 +139,12 @@ void draw()
   loadPixels();
   for (int i = 0; i < (width*height); i++) {
     offset = int(brightness(pixels[i]));
-
-    pixels[i] = color(
-    redPalettes[paletteChoice][(frameCount * rRotationSpeed + lowAmplitude + offset) % 255], 
-    greenPalettes[paletteChoice][(frameCount * gRotationSpeed + midAmplitude + offset) % 255], 
-    bluePalettes[paletteChoice][(frameCount * bRotationSpeed + highAmplitude + offset) % 255]);
+    if (offset < 255 && offset > 0) {
+      pixels[i] = color(
+      redPalettes[paletteChoice][(frameCount * rRotationSpeed + lowAmplitude + offset) % 255], 
+      greenPalettes[paletteChoice][(frameCount * gRotationSpeed + midAmplitude + offset) % 255], 
+      bluePalettes[paletteChoice][(frameCount * bRotationSpeed + highAmplitude + offset) % 255]);
+    }
   }
 
   updatePixels();
@@ -150,9 +163,10 @@ void draw()
     while (lastPalette == paletteChoice) paletteChoice = int(random(numPalettes));
   }
   
+  // led preview stuff
+  // image(suitImage, 0, 0);
+  
   // display the frame rate in the title
   frame.setTitle("FPS: " + int(frameRate));
-  // println(fftLin.getAvg(0) + "," + fftLin.getAvg(1) + "," + fftLin.getAvg(2));
-
 }
 
