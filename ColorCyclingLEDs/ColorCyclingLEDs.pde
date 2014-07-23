@@ -20,8 +20,6 @@ PImage[] images = new PImage[numImages];
 PImage img = new PImage();
 int imageChoice, lastImage; 
 
-// suit image
-PImage suitImage = new PImage();
 
 // set up color palette - palettes should be in the data folder and named lut#.gif
 int numPalettes = 4 - 1; // subtracting 1 due to indexing at 0 later
@@ -112,10 +110,6 @@ void setup()
       bluePalettes[i][j] = int(blue(paletteSample));
     }
   }
-
-  // load suit image
-  suitImage = loadImage("suitLeds.png");
-  suitImage.resize(width, height);
 }
 
 
@@ -163,8 +157,6 @@ void draw()
     while (lastPalette == paletteChoice) paletteChoice = int(random(numPalettes));
   }
   
-  // led preview stuff
-  // image(suitImage, 0, 0);
   
   // display the frame rate in the title
   frame.setTitle("FPS: " + int(frameRate));
