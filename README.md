@@ -1,7 +1,7 @@
 ColorCyclingLEDs
 ================
 
-A trippy color-cycling LED music visualization, similar to the late Nirvana Engine.
+A trippy color-cycling LED music visualization, similar to the late Nirvana Engine. See https://chrisgagne.com/1877/a-sound-sensitive-led-disco-suit-part-1/ for more details.
 
 This is a Processing sketch that works with the fadecandy LED control board.
 
